@@ -6,9 +6,11 @@ import {
     Typography,
 } from "@material-tailwind/react"
 import React, { useState } from "react"
-import api from "../utils/api"
+import { api_client } from "../utils/api"
+import { useNavigate } from "react-router-dom"
 
 const SignIn: React.FC = () => {
+    const navigate = useNavigate()
     const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")
     const [error, setError] = useState("")
@@ -27,8 +29,11 @@ const SignIn: React.FC = () => {
             username,
             password,
         }
-        api.post("/auth/login", loginData)
-            .then(() => {})
+        api_client
+            .post("/auth/login", loginData)
+            .then(() => {
+                navigate("/dashboard")
+            })
             .catch((e) => {
                 setError(e.response.data.error)
                 setTimeout(() => {

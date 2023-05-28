@@ -7,7 +7,7 @@ import {
 } from "@material-tailwind/react"
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
-import api from "../utils/api"
+import { api_client } from "../utils/api"
 
 export default function SignUp() {
     const navigate = useNavigate()
@@ -34,7 +34,7 @@ export default function SignUp() {
             password,
         }
 
-        await api
+        await api_client
             .post("/auth/register", registrationData)
             .then(() => {
                 navigate("/")
