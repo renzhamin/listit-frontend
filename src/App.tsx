@@ -1,56 +1,12 @@
-import viteLogo from "./assets/vite.svg";
-import reactLogo from "./assets/react.svg";
-import sassLogo from "./assets/sass.svg";
-import githubLogo from "./assets/github.svg";
-/* import "./App.scss"; */
-import { Button } from "@material-tailwind/react";
+import React from "react"
+import AppRouter from "./AppRouter"
 
-function App() {
-  return (
-    <div className="App">
-      <Button>BUTTON MTAILWIND</Button>
-      <div className="center">
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-        <a href="https://sass-lang.com" target="_blank">
-          <img src={sassLogo} className="logo sass" alt="Sass logo" />
-        </a>
-      </div>
-
-      <h2>Vite + React + Sass</h2>
-      <p className="read-the-docs">
-        Click on the logos to learn more about each too
-      </p>
-
-      <div></div>
-
-      <div className="card">
-        <a
-          className="center"
-          href="https://github.com/MengLinMaker/PWA-Vite-React-Boilerplate"
-          target="_blank"
-        >
-          <button className="credits">
-            <img src={githubLogo} className="logo h-[5rem]" alt="Vite logo" />
-            <p>Meng Lin Maker</p>
-          </button>
-        </a>
-
-        <h1>
-          <a
-            href="https://github.com/MengLinMaker/PWA-Vite-React-Boilerplate/generate"
-            target="_blank"
-          >
-            <button> Use This Boilerplate </button>
-          </a>
-        </h1>
-      </div>
-    </div>
-  );
+const App: React.FC = () => {
+    return (
+        <div className="App">
+            <AppRouter />
+        </div>
+    )
 }
 
-export default App;
+export default App
