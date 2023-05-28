@@ -1,14 +1,24 @@
-import React, { useState } from "react"
-import { Card, Input, Button, Typography } from "@material-tailwind/react"
+import {
+    Alert,
+    Button,
+    Card,
+    Input,
+    Typography,
+} from "@material-tailwind/react"
+import { useState } from "react"
+import { useNavigate } from "react-router-dom"
+import api from "../utils/api"
 
 export default function SignUp() {
+    const navigate = useNavigate()
     const [username, setUsername] = useState("")
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const [retypePassword, setRetypePassword] = useState("")
     const [passwordError, setPasswordError] = useState("")
+    const [error, setError] = useState("")
 
-    const handleSignUp = (e: { preventDefault: () => void }) => {
+    const handleSignUp = async (e: { preventDefault: () => void }) => {
         e.preventDefault()
 
         // Check if the passwords match
@@ -24,10 +34,18 @@ export default function SignUp() {
             password,
         }
 
-        // Send a POST request to /api/auth/register with registrationData
-        // You can use libraries like Axios or fetch to make the API call
-
-        console.log("Registering:", registrationData)
+        await api
+            .post("/auth/register", registrationData)
+            .then(() => {
+                navigate("/")
+            })
+            .catch((e) => {
+                setError(e.response.data.error)
+                setTimeout(() => {
+                    setError("")
+                }, 2500)
+                return
+            })
     }
 
     return (
@@ -101,6 +119,7 @@ export default function SignUp() {
                     </a>
                 </Typography>
             </form>
+            {error && <Alert color="red">{error}</Alert>}
         </Card>
     )
 }
