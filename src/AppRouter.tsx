@@ -5,6 +5,7 @@ import About from "./components/About"
 import NotFound from "./components/NotFound"
 import SignIn from "./components/SignIn"
 import Dashboard from "./components/Dashboard"
+import ProtectedRoute from "./components/ProtectedRoute"
 
 const AppRouter: React.FC = () => {
     return (
@@ -13,7 +14,14 @@ const AppRouter: React.FC = () => {
                 <Route path="/signup" element={<SignUp />} />
                 <Route path="/" element={<SignIn />} />
                 <Route path="/about" element={<About />} />
-                <Route path="/dashboard" element={<Dashboard />} />
+                <Route
+                    path="/dashboard"
+                    element={
+                        <ProtectedRoute>
+                            <Dashboard />
+                        </ProtectedRoute>
+                    }
+                />
                 <Route element={<NotFound />} />
             </Routes>
         </BrowserRouter>

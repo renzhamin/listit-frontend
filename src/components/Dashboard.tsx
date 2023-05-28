@@ -8,7 +8,7 @@ import {
 } from "@material-tailwind/react"
 
 function Dashboard() {
-    const [data, setData] = useState(null)
+    const [data, setData] = useState<any[]>([])
     const [isLoading, setIsLoading] = useState(false)
     const [error, setError] = useState(null)
 
