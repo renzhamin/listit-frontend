@@ -1,11 +1,5 @@
 import React, { useState } from "react"
-import {
-    Card,
-    Input,
-    Checkbox,
-    Button,
-    Typography,
-} from "@material-tailwind/react"
+import { Card, Input, Button, Typography } from "@material-tailwind/react"
 
 export default function SignUp() {
     const [username, setUsername] = useState("")
@@ -100,7 +94,7 @@ export default function SignUp() {
                 >
                     Already have an account?{" "}
                     <a
-                        href="#"
+                        href="/"
                         className="font-medium text-blue-500 transition-colors hover:text-blue-700"
                     >
                         Sign In
