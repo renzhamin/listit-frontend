@@ -14,7 +14,7 @@ export default function SignUp() {
     const [retypePassword, setRetypePassword] = useState("")
     const [passwordError, setPasswordError] = useState("")
 
-    const handleSignUp = (e) => {
+    const handleSignUp = (e: { preventDefault: () => void }) => {
         e.preventDefault()
 
         // Check if the passwords match
@@ -66,15 +66,24 @@ export default function SignUp() {
                         size="lg"
                         label="Password"
                         value={password}
-                        onChange={(e) => setPassword(e.target.value)}
+                        onChange={(e) => {
+                            setPassword(e.target.value)
+                            if (e.target.value == retypePassword) {
+                                setPasswordError("")
+                            }
+                        }}
                     />
                     <Input
                         type="password"
                         size="lg"
                         label="Retype Password"
                         value={retypePassword}
-                        onChange={(e) => setRetypePassword(e.target.value)}
-                        error={passwordError}
+                        onChange={(e) => {
+                            setRetypePassword(e.target.value)
+                            if (password == e.target.value) {
+                                setPasswordError("")
+                            }
+                        }}
                     />
                 </div>
                 {passwordError && (
