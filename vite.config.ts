@@ -6,11 +6,6 @@ let faviconURL = "/favicon.svg"
 
 // https://vitejs.dev/config/
 export default defineConfig({
-    /* css: { */
-    /*     postcss: { */
-    /*         plugins: [require("tailwindcss/nesting")], */
-    /*     }, */
-    /* }, */
     plugins: [
         react(),
         VitePWA({
