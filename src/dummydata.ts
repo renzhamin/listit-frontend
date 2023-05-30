@@ -1,4 +1,4 @@
-const data = [
+export const lists: any[] = [
     {
         id: "1",
         title: "How to connect to mongodb atlas",
@@ -12,8 +12,8 @@ const data = [
                 content: "Choose the M0 cluster and click on create",
             },
             {
-                title: "Copy connection url"
-            }
+                title: "Copy connection url",
+            },
         ],
     },
 
@@ -66,7 +66,3 @@ const data = [
         ],
     },
 ]
-
-export type TLists = typeof data
-export type TList = typeof data[0]
-export const lists: TLists = data

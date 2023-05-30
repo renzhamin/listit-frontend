@@ -47,7 +47,7 @@ const SignIn: React.FC = () => {
 
     return (
         <div>
-            <Card className="w-96">
+            <Card className="sm2:w-96">
                 <CardHeader
                     variant="gradient"
                     color="blue"

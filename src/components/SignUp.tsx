@@ -50,7 +50,7 @@ export default function SignUp() {
 
     return (
         <div>
-            <Card color="transparent" shadow={false}>
+            <Card shadow={false}>
                 <Typography variant="h4" color="blue-gray">
                     Sign Up
                 </Typography>
@@ -58,7 +58,7 @@ export default function SignUp() {
                     Enter your details to register.
                 </Typography>
                 <form
-                    className="mt-8 mb-2 w-80 max-w-screen-lg sm:w-96"
+                    className="mt-8 mb-2 w-72 max-w-screen-lg sm:w-96"
                     onSubmit={handleSignUp}
                 >
                     <div className="mb-4 flex flex-col gap-6">
