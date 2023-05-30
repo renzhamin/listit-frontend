@@ -1,18 +1,19 @@
 import {
     Alert,
-    Button,
     Card,
     CardHeader,
     CardBody,
     CardFooter,
-    Input,
     Typography,
+    Input,
+    Button,
 } from "@material-tailwind/react"
+
 import React, { useState } from "react"
 import { api_client } from "../utils/api"
 import { useNavigate } from "react-router-dom"
 
-const SignIn: React.FC = () => {
+export default function SignIn() {
     const navigate = useNavigate()
     const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")
@@ -32,10 +33,11 @@ const SignIn: React.FC = () => {
             username,
             password,
         }
+        console.log(loginData)
         api_client
             .post("/auth/login", loginData)
             .then(() => {
-                navigate("/home")
+                navigate("/dashboard")
             })
             .catch((e) => {
                 setError(e.response.data.error)
@@ -64,7 +66,6 @@ const SignIn: React.FC = () => {
                         onChange={handleUsernameChange}
                     />
                     <Input
-                        type="password"
                         label="Password"
                         size="lg"
                         onChange={handlePasswordChange}
@@ -86,7 +87,7 @@ const SignIn: React.FC = () => {
                             color="blue"
                             className="ml-1 font-bold"
                         >
-                            Sign up
+                            Sign Up
                         </Typography>
                     </Typography>
                 </CardFooter>
@@ -94,17 +95,13 @@ const SignIn: React.FC = () => {
             {error && (
                 <div>
                     <Alert
-                        color="yellow"
+                        color="red"
                         className="absolute bottom-3 right-3 w-fit"
                     >
-                        <Typography color="red" variant="h6">
-                            {error}
-                        </Typography>
+                        {error}
                     </Alert>
                 </div>
             )}
         </div>
     )
 }
-
-export default SignIn

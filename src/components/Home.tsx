@@ -6,6 +6,8 @@ import {
     ListItemSuffix,
     Chip,
     Card,
+    CardHeader,
+    Typography,
 } from "@material-tailwind/react"
 
 import { lists } from "../dummydata"
@@ -13,16 +15,26 @@ import { lists } from "../dummydata"
 const Home: React.FC = () => {
     const navigate = useNavigate()
 
-
     return (
         <div>
-            <Card className="w-96">
+            <Card className="p-2">
+                <CardHeader
+                    variant="gradient"
+                    color="blue"
+                    className="mb-4 grid h-28 place-items-center"
+                >
+                    <Typography variant="h3" color="white">
+                        Lists
+                    </Typography>
+                </CardHeader>
                 <List>
                     {lists.map((l) => {
                         return (
-                            <ListItem onClick={(e)=>{
+                            <ListItem
+                                onClick={() => {
                                     navigate(`/list/${l.id}`)
-                                }}>
+                                }}
+                            >
                                 {l.title}
                                 <ListItemSuffix>
                                     <Chip
