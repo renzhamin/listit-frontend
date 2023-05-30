@@ -1,4 +1,4 @@
-export const lists = [
+const data = [
     {
         id: "1",
         title: "How to connect to mongodb atlas",
@@ -63,3 +63,6 @@ export const lists = [
         ],
     },
 ]
+
+type TList = keyof (typeof data)[0]
+export const lists: TList[] = data
