@@ -1,5 +1,5 @@
 import React from "react"
-
+import { useNavigate } from "react-router-dom"
 import {
     List,
     ListItem,
@@ -11,13 +11,18 @@ import {
 import { lists } from "../dummydata"
 
 const Home: React.FC = () => {
+    const navigate = useNavigate()
+
+
     return (
         <div>
             <Card className="w-96">
                 <List>
                     {lists.map((l) => {
                         return (
-                            <ListItem>
+                            <ListItem onClick={(e)=>{
+                                    navigate(`/list/${l.id}`)
+                                }}>
                                 {l.title}
                                 <ListItemSuffix>
                                     <Chip

@@ -11,6 +11,9 @@ const data = [
                 title: "Create a cluster",
                 content: "Choose the M0 cluster and click on create",
             },
+            {
+                title: "Copy connection url"
+            }
         ],
     },
 
@@ -64,5 +67,6 @@ const data = [
     },
 ]
 
-type TList = keyof (typeof data)[0]
-export const lists: TList[] = data
+export type TLists = typeof data
+export type TList = typeof data[0]
+export const lists: TLists = data
