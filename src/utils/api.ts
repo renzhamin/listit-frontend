@@ -1,12 +1,18 @@
 import axios from "axios"
 
+let domain = ""
+
+if (import.meta.env.DEV) {
+    domain = "http://localhost:5000"
+}
+
 const api_client = axios.create({
-    baseURL: "http://localhost:5000/api", // Replace with your actual base URL
+    baseURL: domain + "/api",
     withCredentials: true,
 })
 
 const api_user = axios.create({
-    baseURL: "http://localhost:5000/api",
+    baseURL: domain + "/api",
     withCredentials: true,
 })
 
