@@ -7,6 +7,10 @@ import {
     Card,
     Button,
     IconButton,
+    Dialog,
+    DialogBody,
+    DialogHeader,
+    DialogFooter,
 } from "@material-tailwind/react"
 import { lists } from "../dummydata"
 import { useParams } from "react-router-dom"
@@ -35,6 +39,7 @@ function Icon({ id, open }) {
 const ShowList: React.FC = () => {
     const [open, setOpen] = useState(-1)
     const { id } = useParams()
+    const [deleteItemIndex, setDeleteItemIndex] = useState(false);
     const handleOpen = (value: number) => {
         setOpen(open === value ? 0 : value)
     }
@@ -49,9 +54,46 @@ const ShowList: React.FC = () => {
         console.log(`Edit item ${itemIndex} of list ${list.id}`)
     }
 
-    const handleDelete = (itemIndex: number) => {
-        console.log(`Delete item ${itemIndex} of list ${list.id}`)
-    }
+    const openDeleteItemDialog = () => {
+        setOpen(-1);
+        setDeleteItemIndex(true);
+         
+      };
+    
+      const closeDeleteItemDialog = () => {
+        setOpen(-1);
+        setDeleteItemIndex(false); 
+      };
+
+    // const handleEdit = (itemIndex: number) => {
+    //     const updatedContent = prompt("Enter the updated content") || "";
+    //     const updatedList = { ...list };
+    //     updatedList.content[itemIndex].content = updatedContent;
+    //     setLists((prevLists) => {
+    //       const updatedLists = [...prevLists];
+    //       const listIndex = updatedLists.findIndex((l) => l.id === id);
+    //       updatedLists[listIndex] = updatedList;
+    //       return updatedLists;
+    //     });
+    //   };
+
+      const handleDelete = (itemIndex: number) => {
+        setDeleteItemIndex(itemIndex);
+      };
+    
+      const confirmDelete = () => {
+        setLists((prevLists) => {
+          const updatedLists = [...prevLists];
+          const list = updatedLists.find((l) => l.id === id);
+          if (list) {
+            const updatedContent = [...list.content];
+            updatedContent.splice(deleteItemIndex, 1);
+            list.content = updatedContent;
+          }
+          return updatedLists;
+        });
+        setDeleteItemIndex(-1);
+      };
 
     return (
         <div>
@@ -71,7 +113,7 @@ const ShowList: React.FC = () => {
                             >
                                <IconButton
                                     color="red"
-                                    onClick={() => handleDelete(ind)}
+                                    onClick={openDeleteItemDialog}
                                     size="sm"
                                     ripple="dark"
                                    >
@@ -109,6 +151,25 @@ const ShowList: React.FC = () => {
                     </div>
                 ))}
             </Card>
+            <Dialog size="sm" /*active={deleteItemIndex !== -1}*/ open={deleteItemIndex} handler={closeDeleteItemDialog}>
+        <DialogHeader>Delete Item</DialogHeader>
+        <DialogBody>
+          Are you sure you want to delete this item?
+        </DialogBody>
+        <DialogFooter>
+          <Button
+            color="red"
+            onClick={confirmDelete}
+            ripple="light"
+            className="mr-2"
+          >
+            Delete
+          </Button>
+          <Button color="gray" onClick={closeDeleteItemDialog} ripple="dark">
+            Cancel
+          </Button>
+        </DialogFooter>
+      </Dialog>
         </div>
     )
 }
