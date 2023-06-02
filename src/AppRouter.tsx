@@ -6,8 +6,10 @@ import NotFound from "./components/NotFound"
 import SignIn from "./components/SignIn"
 import Dashboard from "./components/Dashboard"
 import Home from "./components/Home"
+import HomeTest from "./components/HomeTest"
 import ProtectedRoute from "./components/ProtectedRoute"
 import ShowList from "./components/List"
+import ShowListTest from "./components/ListTest"
 
 const AppRouter: React.FC = () => {
     return (
@@ -16,7 +18,9 @@ const AppRouter: React.FC = () => {
                 <Route path="/signup" element={<SignUp />} />
                 <Route path="/" element={<SignIn />} />
                 <Route path="/home" element={<Home />} />
+                <Route path="/hometest" element={<HomeTest />} />
                 <Route path="/list/:id" element={<ShowList />} />
+                <Route path="/listtest/:id" element={<ShowListTest />} />
                 <Route path="/about" element={<About />} />
                 <Route
                     path="/dashboard"
