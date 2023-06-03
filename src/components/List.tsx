@@ -5,6 +5,7 @@ import {
     Alert,
     Button,
     Card,
+    CardHeader,
     Dialog,
     DialogBody,
     DialogFooter,
@@ -15,7 +16,7 @@ import {
     Typography,
 } from "@material-tailwind/react"
 import React, { useEffect, useState } from "react"
-import { useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import { api_user } from "../utils/api"
 import { getUserId } from "../utils/getUserId"
 
@@ -62,6 +63,7 @@ const ShowList: React.FC = () => {
     const [loading, setLoading] = useState(true)
     const [changed, setChanged] = useState(false)
     const userId = getUserId()
+    const navigate = useNavigate()
 
     useEffect(() => {
         if (loading) {
@@ -224,6 +226,19 @@ const ShowList: React.FC = () => {
     return (
         <div>
             <Card className="p-4 w-72 sm:w-[75vw] md:w-[65vw]">
+                <CardHeader
+                    variant="gradient"
+                    color="blue"
+                    className="mb-4 grid h-12 w-36 place-items-center hover:cursor-pointer"
+                    onClick={() => {
+                        navigate("/")
+                    }}
+                >
+                    <Typography variant="h5" color="white">
+                        LISTIT
+                    </Typography>
+                </CardHeader>
+
                 <Typography variant="h3" className="mb-8">
                     {/* {editListIndex === } */}
 
@@ -402,7 +417,6 @@ const ShowList: React.FC = () => {
                         </Accordion>
                     </div>
                 ))}
-
                 {addListButton ? (
                     <Button
                         color="blue-gray"
