@@ -8,6 +8,7 @@ import Dashboard from "./components/Dashboard"
 import Home from "./components/Home"
 import ProtectedRoute from "./components/ProtectedRoute"
 import ShowList from "./components/List"
+import Searchresults from "./components/Searchresults"
 
 const AppRouter: React.FC = () => {
     return (
@@ -15,7 +16,18 @@ const AppRouter: React.FC = () => {
             <Routes>
                 <Route path="/signup" element={<SignUp />} />
                 <Route path="/" element={<SignIn />} />
-                <Route path="/home" element={<Home />} />
+                <Route
+                    path="/home"
+                    element={
+                        <ProtectedRoute>
+                            <Home />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/search-results/:searchString"
+                    element={<Searchresults />}
+                />
                 <Route path="/list/:id" element={<ShowList />} />
                 <Route path="/about" element={<About />} />
                 <Route

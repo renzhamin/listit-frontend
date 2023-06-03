@@ -1,10 +1,18 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import AppRouter from "./AppRouter"
+import { api_user } from "./utils/api"
 
 export const AppContext = React.createContext({})
 
 const App: React.FC = () => {
     const [accessToken, setAccessToken] = useState("")
+    useEffect(() => {
+        const interval = setInterval(() => {
+            api_user.get("/auth/refresh")
+        }, 1000 * 60 * 5)
+
+        return () => clearInterval(interval)
+    })
     return (
         <AppContext.Provider value={{ accessToken, setAccessToken }}>
             <div className="App">

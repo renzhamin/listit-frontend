@@ -16,16 +16,14 @@ const api_user = axios.create({
     withCredentials: true,
 })
 
-api_user.interceptors.response.use(
-    async (config) => {
-        return config
-    },
-    (error) => {
-        console.log(error.response.data)
-        if (error.response?.data?.tokenError) {
-            api_client.get("/auth/refresh")
-        }
-    }
-)
+/* api_user.interceptors.response.use( */
+/*     async (config) => { */
+/*         return config */
+/*     }, */
+/*     (error) => { */
+/*         console.log(error.data) */
+/*         api_client.get("/auth/refresh") */
+/*     } */
+/* ) */
 
 export { api_client, api_user }

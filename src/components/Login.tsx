@@ -33,7 +33,6 @@ export default function SignIn() {
             username,
             password,
         }
-        console.log(loginData)
         api_client
             .post("/auth/login", loginData)
             .then(() => {
