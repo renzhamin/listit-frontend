@@ -26,6 +26,7 @@ const Home: React.FC = () => {
   const [isCreatingList, setIsCreatingList] = useState(false);
   const [deleteListIndex, setDeleteListIndex] = useState(false);
   const [listTitle, setListTitle] = useState("");
+  const [searchKeyword, setSearchKeyword] = useState("");
 
   const openCreateListDialog = () => {
     setIsCreatingList(true);
@@ -61,6 +62,16 @@ const Home: React.FC = () => {
     closeDeleteListDialog();
   };
 
+  const handleSearch = () => {
+    navigate(`/search-results/${searchKeyword}`); // Navigate to search results page
+  };
+
+  const handleSearchKeywordChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setSearchKeyword(event.target.value);
+  };
+
   return (
       <div>
           <Navbar className="mx-auto max-w-screen-xl px-4 py-3">
@@ -82,10 +93,13 @@ const Home: React.FC = () => {
                               className: "min-w-[288px]",
                           }}
                           style={{ width: "100%" }}
+                          value={searchKeyword}
+                          onChange={handleSearchKeywordChange}
                       />
                       <Button
                           size="sm"
                           className="!absolute right-1 top-1 rounded"
+                          onClick={handleSearch}
                       >
                           Search
                       </Button>
