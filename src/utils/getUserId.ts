@@ -15,6 +15,6 @@ function getCookie(cname: string) {
 }
 
 export const getUserId = () => {
-    const userId = getCookie("userId")
+    const userId = getCookie("userId") || null
     return userId
 }

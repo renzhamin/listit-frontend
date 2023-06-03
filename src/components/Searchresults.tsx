@@ -1,26 +1,6 @@
-import React, { useEffect } from "react"
-import { useNavigate } from "react-router-dom"
-import { useState } from "react"
-import { useParams } from "react-router-dom"
-import {
-    List,
-    ListItem,
-    ListItemSuffix,
-    Chip,
-    Card,
-    CardHeader,
-    Typography,
-    Button,
-    Dialog,
-    DialogHeader,
-    DialogBody,
-    DialogFooter,
-    Input,
-    IconButton,
-    Avatar,
-    Navbar,
-} from "@material-tailwind/react"
-import { lists } from "../dummydata"
+import { Button, Card, List, ListItem } from "@material-tailwind/react"
+import React, { useEffect, useState } from "react"
+import { useNavigate, useParams } from "react-router-dom"
 import { api_user } from "../utils/api"
 
 const SearchResults: React.FC = () => {

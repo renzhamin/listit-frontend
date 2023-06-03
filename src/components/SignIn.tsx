@@ -10,10 +10,16 @@ import {
 } from "@material-tailwind/react"
 import React, { useState } from "react"
 import { api_client } from "../utils/api"
-import { useNavigate } from "react-router-dom"
+import { Navigate, useNavigate } from "react-router-dom"
+import { getUserId } from "../utils/getUserId"
 
 const SignIn: React.FC = () => {
     const navigate = useNavigate()
+
+    if (getUserId()) {
+        return <Navigate to="/home" />
+    }
+
     const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")
     const [error, setError] = useState("")
