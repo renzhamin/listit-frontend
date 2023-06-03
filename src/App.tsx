@@ -8,7 +8,12 @@ const App: React.FC = () => {
     const [accessToken, setAccessToken] = useState("")
     useEffect(() => {
         const interval = setInterval(() => {
-            api_user.get("/auth/refresh")
+            api_user
+                .get("/auth/refresh")
+                .then(() => {})
+                .catch((e) => {
+                    console.log("refresh error", e)
+                })
         }, 1000 * 60 * 5)
 
         return () => clearInterval(interval)

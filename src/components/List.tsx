@@ -1,21 +1,23 @@
-import React, { useState } from "react"
 import {
     Accordion,
-    Typography,
-    AccordionHeader,
     AccordionBody,
-    Card,
+    AccordionHeader,
+    Alert,
     Button,
-    IconButton,
+    Card,
     Dialog,
     DialogBody,
-    DialogHeader,
     DialogFooter,
-    Textarea,
+    DialogHeader,
+    IconButton,
     Input,
+    Textarea,
+    Typography,
 } from "@material-tailwind/react"
-import { lists } from "../dummydata"
+import React, { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
+import { api_user } from "../utils/api"
+import { getUserId } from "../utils/getUserId"
 
 function Icon({ id, open }) {
     return (
@@ -54,12 +56,50 @@ const ShowList: React.FC = () => {
     const [addListButton, setAddListButton] = useState(true)
     const [newTitle, setNewTitle] = useState("")
     const [newContent, setNewContent] = useState("")
-    
+
+    const [list, setList] = useState<any>(null)
+    const [error, setError] = useState("")
+    const [loading, setLoading] = useState(true)
+    const [changed, setChanged] = useState(false)
+    const userId = getUserId()
+
+    useEffect(() => {
+        if (loading) {
+            api_user
+                .get(`/list/${id}`)
+                .then((data) => {
+                    setList(data.data.list)
+                })
+                .catch((e) => {
+                    console.log("ERROR HERE", e)
+                    setError(e.error)
+                })
+
+            setLoading(false)
+        }
+    })
+
+    useEffect(() => {
+        if (changed) {
+            console.log(list)
+            api_user.put(`/list/${id}`, list).catch((e) => {
+                console.log(e)
+            })
+            setChanged(false)
+        }
+    }, [changed])
+
+    useEffect(() => {
+        if (error) {
+            setTimeout(() => {
+                setError("")
+            }, 2500)
+        }
+    }, [error])
+
     const handleOpen = (value: number) => {
         setOpen(open === value ? 0 : value)
     }
-
-    const list = lists.find((l) => l.id === id)
 
     if (!list) {
         return <div>List not found</div>
@@ -74,7 +114,14 @@ const ShowList: React.FC = () => {
 
     const handleSaveEdit = () => {
         // Perform save edit logic here
+        if (userId !== list.userId) {
+            setError("List not owned by you")
+            return
+        }
         console.log(`Save edited item ${editItemIndex} of list ${list.id}`)
+        list.content[editItemIndex].title = editedTitle
+        list.content[editItemIndex].content = editedContent
+        setChanged(true)
         setEditItemIndex(-1)
         setEditedTitle("")
         setEditedContent("")
@@ -93,8 +140,15 @@ const ShowList: React.FC = () => {
     }
 
     const handleSaveTitle = () => {
+        if (userId !== list.userId) {
+            setError("List not owned by you")
+            return
+        }
+
         // Perform save title logic here
         console.log(`Save edited title of list ${list.id}`)
+        list.title = editedMainTitle
+        setChanged(true)
         setEditingTitle(false)
         setEditedTitle("")
     }
@@ -120,6 +174,8 @@ const ShowList: React.FC = () => {
     const confirmDelete = (e) => {
         // Perform deletion logic here
         e.stopPropagation()
+        list.content.splice(deleteItemIndex, 1)
+        setChanged(true)
         setShowDelete(false)
         setDeleteItemIndex(-1)
     }
@@ -128,49 +184,31 @@ const ShowList: React.FC = () => {
         setAddingItem(true)
     }
 
-    const handleSaveNewItem = () => {
-        // Perform save new item logic here
-        console.log(`Save new item for list ${list.id}`)
-        setNewItemTitle("")
-        setNewItemContent("")
-    }
-
     const handleCancelNewItem = () => {
-        setAddingItem(false)
-        setNewItemTitle("")
-        setNewItemContent("")
+        /* setAddingItem(false) */
+        /* setNewItemTitle("") */
+        /* setNewItemContent("") */
+        setNewTitle("")
+        setNewContent("")
+        setAddListButton(true)
     }
 
-     
+    const handleAddList = () => {
+        setAddListButton(false)
+    }
 
-     const handleAddList = () => {
-         setAddListButton(false)
-     }
+    const handleSubmit = () => {
+        const newItem = {
+            title: newTitle,
+            content: newContent || "...",
+        }
 
-
-     const handleSubmit = () => {
-         const newItem = {
-             title: newTitle,
-             content: newContent,
-         }
-
-         /*
-        // Create a copy of the existing list
-        const updatedList = [...list.content]
-
-        // Add the new item to the list
-        updatedList.push(newItem)
-
-        // Update the state with the updated list and reset the input fields
-        setList((prevState) => ({
-            ...prevState,
-            content: updatedList,
-        }))
-        */
-         setNewTitle("")
-         setNewContent("")
-         setAddListButton(true)
-     }
+        list.content.push(newItem)
+        setChanged(true)
+        setNewTitle("")
+        setNewContent("")
+        setAddListButton(true)
+    }
 
     return (
         <div>
@@ -231,7 +269,6 @@ const ShowList: React.FC = () => {
                         <Accordion
                             open={open == ind + 1}
                             icon={<Icon id={ind + 1} open={open} />}
-                            disabled={!item.content}
                         >
                             <AccordionHeader
                                 onClick={() => handleOpen(ind + 1)}
@@ -374,15 +411,27 @@ const ShowList: React.FC = () => {
                             className="w-full"
                             style={{ height: "100px" }}
                         />
-                        <Button
-                            color="blue-gray"
-                            onClick={handleSubmit}
-                            size="sm"
-                            className="mt-4"
-                            style={{ width: "100%" }}
-                        >
-                            Submit
-                        </Button>
+                        <div className="flex">
+                            <Button
+                                color="red"
+                                onClick={handleCancelNewItem}
+                                size="sm"
+                                className="m-4"
+                                style={{ width: "100%" }}
+                            >
+                                Cancel
+                            </Button>
+
+                            <Button
+                                color="blue-gray"
+                                onClick={handleSubmit}
+                                size="sm"
+                                className="m-4"
+                                style={{ width: "100%" }}
+                            >
+                                Submit
+                            </Button>
+                        </div>
                     </div>
                 )}
             </Card>
@@ -417,6 +466,16 @@ const ShowList: React.FC = () => {
                     </Button>
                 </DialogFooter>
             </Dialog>
+            {error && (
+                <div>
+                    <Alert
+                        color="red"
+                        className="absolute bottom-3 right-3 w-fit"
+                    >
+                        {error}
+                    </Alert>
+                </div>
+            )}
         </div>
     )
 }
