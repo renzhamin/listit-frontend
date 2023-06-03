@@ -277,7 +277,6 @@ const ShowList: React.FC = () => {
                                     color="red"
                                     onClick={() => openDeleteItemDialog(ind)}
                                     size="sm"
-                                    ripple="dark"
                                     style={{ minWidth: "30px" }}
                                 >
                                     <svg
@@ -285,7 +284,6 @@ const ShowList: React.FC = () => {
                                         width="16"
                                         height="16"
                                         fill="currentColor"
-                                        class="bi bi-trash"
                                         viewBox="0 0 16 16"
                                     >
                                         <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z" />
@@ -439,7 +437,7 @@ const ShowList: React.FC = () => {
             <Dialog
                 size="sm"
                 open={showDelete}
-                onClose={closeDeleteItemDialog}
+                handler={closeDeleteItemDialog}
                 style={{
                     minWidth: "230px",
                 }}
@@ -452,16 +450,11 @@ const ShowList: React.FC = () => {
                     <Button
                         color="red"
                         onClick={confirmDelete}
-                        ripple="light"
                         className="mr-2"
                     >
                         Delete
                     </Button>
-                    <Button
-                        color="gray"
-                        onClick={closeDeleteItemDialog}
-                        ripple="dark"
-                    >
+                    <Button color="gray" onClick={closeDeleteItemDialog}>
                         Cancel
                     </Button>
                 </DialogFooter>
