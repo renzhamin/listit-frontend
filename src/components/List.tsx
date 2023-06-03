@@ -58,7 +58,7 @@ const ShowList: React.FC = () => {
     const [newContent, setNewContent] = useState("")
 
     const [list, setList] = useState<any>(null)
-    const [error, setError] = useState("")
+    const [msg, setMsg] = useState("")
     const [loading, setLoading] = useState(true)
     const [changed, setChanged] = useState(false)
     const userId = getUserId()
@@ -72,7 +72,7 @@ const ShowList: React.FC = () => {
                 })
                 .catch((e) => {
                     console.log("ERROR HERE", e)
-                    setError(e.error)
+                    setMsg(e.error)
                 })
 
             setLoading(false)
@@ -90,12 +90,12 @@ const ShowList: React.FC = () => {
     }, [changed])
 
     useEffect(() => {
-        if (error) {
+        if (msg) {
             setTimeout(() => {
-                setError("")
+                setMsg("")
             }, 2500)
         }
-    }, [error])
+    }, [msg])
 
     const handleOpen = (value: number) => {
         setOpen(open === value ? 0 : value)
@@ -115,7 +115,7 @@ const ShowList: React.FC = () => {
     const handleSaveEdit = () => {
         // Perform save edit logic here
         if (userId !== list.userId) {
-            setError("List not owned by you")
+            setMsg("List not owned by you")
             return
         }
         console.log(`Save edited item ${editItemIndex} of list ${list.id}`)
@@ -141,7 +141,7 @@ const ShowList: React.FC = () => {
 
     const handleSaveTitle = () => {
         if (userId !== list.userId) {
-            setError("List not owned by you")
+            setMsg("List not owned by you")
             return
         }
 
@@ -210,11 +210,23 @@ const ShowList: React.FC = () => {
         setAddListButton(true)
     }
 
+    const handleImport = () => {
+        api_user
+            .post("/list", list)
+            .then(() => {
+                setMsg("List Imported")
+            })
+            .catch(() => {
+                setMsg("Could not import list")
+            })
+    }
+
     return (
         <div>
             <Card className="p-4 w-72 sm:w-[75vw] md:w-[65vw]">
                 <Typography variant="h3" className="mb-8">
                     {/* {editListIndex === } */}
+
                     {editingTitle ? (
                         <div>
                             <Input
@@ -229,7 +241,6 @@ const ShowList: React.FC = () => {
                                     fontSize: "18px",
                                 }}
                             />
-
                             <Button
                                 ripple={true}
                                 color="green"
@@ -261,6 +272,17 @@ const ShowList: React.FC = () => {
                             >
                                 Edit title
                             </Button>
+
+                            {userId !== list.userId && (
+                                <Button
+                                    color="green"
+                                    className="float-right mr-2 text-center"
+                                    size="sm"
+                                    onClick={handleImport}
+                                >
+                                    Import
+                                </Button>
+                            )}
                         </>
                     )}
                 </Typography>
@@ -459,13 +481,10 @@ const ShowList: React.FC = () => {
                     </Button>
                 </DialogFooter>
             </Dialog>
-            {error && (
+            {msg && (
                 <div>
-                    <Alert
-                        color="red"
-                        className="absolute bottom-3 right-3 w-fit"
-                    >
-                        {error}
+                    <Alert className="absolute bottom-3 right-3 w-fit">
+                        {msg}
                     </Alert>
                 </div>
             )}
