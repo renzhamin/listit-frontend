@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react"
 import {
     Accordion,
     Typography,
@@ -14,8 +14,9 @@ import {
     Textarea,
     Input,
 } from "@material-tailwind/react"
-import { lists } from "../dummydata";
-import { useParams } from "react-router-dom";
+import { lists } from "../dummydata"
+import { useParams } from "react-router-dom"
+import { api_user } from "../utils/api"
 
 function Icon({ id, open }) {
     return (
@@ -29,166 +30,203 @@ function Icon({ id, open }) {
             stroke="currentColor"
             strokeWidth={2}
         >
-            <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+            <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M19 9l-7 7-7-7"
+            />
         </svg>
-    );
+    )
 }
 
 const ShowList: React.FC = () => {
-    const [open, setOpen] = useState(-1);
-    const { id } = useParams();
-    const [deleteItemIndex, setDeleteItemIndex] = useState(false);
-    const [editItemIndex, setEditItemIndex] = useState(-1);
-    const [editedTitle, setEditedTitle] = useState("");
-    const [editedMainTitle, setEditedMainTitle] = useState("");
-    const [editedContent, setEditedContent] = useState("");
-    const [editingTitle, setEditingTitle] = useState(false);
-    const [addingItem, setAddingItem] = useState(false);
-    const [newItemTitle, setNewItemTitle] = useState("");
-    const [newItemContent, setNewItemContent] = useState("");
+    const [open, setOpen] = useState(-1)
+    const [deleteItemIndex, setDeleteItemIndex] = useState(false)
+    const [editItemIndex, setEditItemIndex] = useState(-1)
+    const [editedTitle, setEditedTitle] = useState("")
+    const [editedMainTitle, setEditedMainTitle] = useState("")
+    const [editedContent, setEditedContent] = useState("")
+    const [editingTitle, setEditingTitle] = useState(false)
+    const [addingItem, setAddingItem] = useState(false)
+    const [newItemTitle, setNewItemTitle] = useState("")
+    const [newItemContent, setNewItemContent] = useState("")
+
+    const [list, setList] = useState<any>(null)
+    const [error, setError] = useState("Loading")
+    const [changed, setChanged] = useState(false)
+    const { id } = useParams()
+
+    useEffect(() => {
+        if (error) {
+            api_user
+                .get(`/list/${id}`)
+                .then((data) => {
+                    setError("")
+                    setList(data.data.list)
+                })
+                .catch((e) => {
+                    console.log("ERROR HERE", e)
+                    setError(e.error)
+                })
+        }
+    })
+
+    useEffect(() => {
+        if (changed) {
+            console.log(list)
+            setChanged(false)
+        }
+        /* api_user.put(`/list/${id}`, list).catch((e) => { */
+        /*     console.log(e) */
+        /* }) */
+    }, [changed])
 
     const handleOpen = (value: number) => {
-        setOpen(open === value ? 0 : value);
-    };
-
-    const list = lists.find((l) => l.id === id);
+        setOpen(open === value ? 0 : value)
+    }
 
     if (!list) {
-        return <div>List not found</div>;
+        return <div>List not found</div>
+    }
+
+    if (error) {
+        return <div>{error}</div>
     }
 
     const handleEdit = (itemIndex: number) => {
-        const item = list.content[itemIndex];
-        setEditItemIndex(itemIndex);
-        setEditedTitle(item.title);
-        setEditedContent(item.content);
-    };
+        const item = list.content[itemIndex]
+        setEditItemIndex(itemIndex)
+        setEditedTitle(item.title)
+        setEditedContent(item.content)
+    }
 
     const handleSaveEdit = () => {
         // Perform save edit logic here
-        console.log(`Save edited item ${editItemIndex} of list ${list.id}`);
-        setEditItemIndex(-1);
-        setEditedTitle("");
-        setEditedContent("");
-    };
+        console.log(`Save edited item ${editItemIndex} of list ${list.id}`)
+        list.content[editItemIndex].title = editedTitle
+        list.content[editItemIndex].content = editedContent
+        setChanged(true)
+        setEditItemIndex(-1)
+        setEditedTitle("")
+        setEditedContent("")
+    }
 
     const handleCancelEdit = () => {
-        setEditItemIndex(-1);
-        setEditedTitle("");
-        setEditedContent("");
-    };
-
+        setEditItemIndex(-1)
+        setEditedTitle("")
+        setEditedContent("")
+    }
 
     const handleEditTitle = () => {
         // console.log(`Edit title of list ${list.id}`);
-        setEditingTitle(true);
-    setEditedMainTitle(list.title);
-    };
+        setEditingTitle(true)
+        setEditedMainTitle(list.title)
+    }
 
     const handleSaveTitle = () => {
         // Perform save title logic here
-        console.log(`Save edited title of list ${list.id}`);
-        setEditingTitle(false);
-        setEditedTitle("");
-      };
+        console.log(`Save edited title of list ${list.id}`)
+        list.title = editedMainTitle
+        setChanged(true)
+        setEditingTitle(false)
+        setEditedTitle("")
+    }
 
-
-      const handleCancelTitle = () => {
-        setEditingTitle(false);
-        setEditedTitle("");
-      };
-
+    const handleCancelTitle = () => {
+        setEditingTitle(false)
+        setEditedTitle("")
+    }
 
     const openDeleteItemDialog = () => {
-        setOpen(-1);
-        setDeleteItemIndex(true);
-    };
+        setOpen(-1)
+        setDeleteItemIndex(true)
+    }
 
     const closeDeleteItemDialog = () => {
-        setOpen(-1);
-        setDeleteItemIndex(false);
-    };
+        setOpen(-1)
+        setDeleteItemIndex(false)
+    }
 
-    const handleDelete = (itemIndex: number) => {
-        setDeleteItemIndex(itemIndex);
-    };
+    /* const handleDelete = (itemIndex: number) => { */
+    /*     setDeleteItemIndex(itemIndex) */
+    /* } */
 
     const confirmDelete = () => {
         // Perform deletion logic here
-        setDeleteItemIndex(false);
-    };
+        setDeleteItemIndex(false)
+    }
 
     const handleAddItems = () => {
-        setAddingItem(true);
-      };
-    
-      const handleSaveNewItem = () => {
+        setAddingItem(true)
+    }
+
+    const handleSaveNewItem = () => {
         // Perform save new item logic here
-        console.log(`Save new item for list ${list.id}`);
-        setNewItemTitle("");
-        setNewItemContent("");
-      };
-    
-      const handleCancelNewItem = () => {
-        setAddingItem(false);
-        setNewItemTitle("");
-        setNewItemContent("");
-      };
+        console.log(`Save new item for list ${list.id}`)
+        setNewItemTitle("")
+        setNewItemContent("")
+    }
+
+    const handleCancelNewItem = () => {
+        setAddingItem(false)
+        setNewItemTitle("")
+        setNewItemContent("")
+    }
 
     return (
         <div>
             <Card className="p-4 w-72 sm:w-[75vw] md:w-[65vw]">
-               <Typography variant="h3" className="mb-8">
-          
-          {/* {editListIndex === } */}
-          {editingTitle ? (
-            <div>
-            <Input
-              variant="static"
-              label="Edit Title"
-              value={editedMainTitle}
-              onChange={(e) => setEditedMainTitle(e.target.value)}
-              style={{
-                width: "100%",
-                fontSize: "18px",
-              }}
-            />
-            
-                 <Button
-                    ripple={true}
-                    color="green"
-                    onClick={handleSaveTitle}
-                    size="sm"
-                    className="float-right"
-                      >
-                         Save
-                 </Button>
-                 <Button
-                    ripple={true}
-                    color="red"
-                    onClick={handleCancelTitle}
-                    size="sm"
-                    className="float-right mr-2"
-                      >
-                         Cancel
-                 </Button>
-            </div>
-            
-          ) : (
-            <>
-              {list.title}
-              <Button
-                ripple={true}
-                color="blue-gray"
-                onClick={handleEditTitle}
-                size="sm"
-                className="float-right"
-              >
-                Edit title
-              </Button>
-            </>
-          )}
-        </Typography>
+                <Typography variant="h3" className="mb-8">
+                    {/* {editListIndex === } */}
+                    {editingTitle ? (
+                        <div>
+                            <Input
+                                variant="static"
+                                label="Edit Title"
+                                value={editedMainTitle}
+                                onChange={(e) =>
+                                    setEditedMainTitle(e.target.value)
+                                }
+                                style={{
+                                    width: "100%",
+                                    fontSize: "18px",
+                                }}
+                            />
+
+                            <Button
+                                ripple={true}
+                                color="green"
+                                onClick={handleSaveTitle}
+                                size="sm"
+                                className="float-right"
+                            >
+                                Save
+                            </Button>
+                            <Button
+                                ripple={true}
+                                color="red"
+                                onClick={handleCancelTitle}
+                                size="sm"
+                                className="float-right mr-2"
+                            >
+                                Cancel
+                            </Button>
+                        </div>
+                    ) : (
+                        <>
+                            {list.title}
+                            <Button
+                                ripple={true}
+                                color="blue-gray"
+                                onClick={handleEditTitle}
+                                size="sm"
+                                className="float-right"
+                            >
+                                Edit title
+                            </Button>
+                        </>
+                    )}
+                </Typography>
                 {list.content.map((item, ind) => (
                     <div key={ind}>
                         <Accordion
@@ -263,7 +301,7 @@ const ShowList: React.FC = () => {
                                                 setEditedContent(e.target.value)
                                             }
                                             resize
-                                            style={{height: "50px"}}
+                                            style={{ height: "50px" }}
                                         />
                                     ) : (
                                         <Typography className="font-medium text-left pl-8">
@@ -340,6 +378,6 @@ const ShowList: React.FC = () => {
             </Dialog>
         </div>
     )
-};
+}
 
-export default ShowList;
+export default ShowList

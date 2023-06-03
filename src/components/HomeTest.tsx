@@ -71,7 +71,7 @@ const HomeTest: React.FC = () => {
                             <ListItem
                                 key={ind}
                                 onClick={() => {
-                                    navigate(`/listtest/${l.id}`)
+                                    navigate(`/list/${l.id}`)
                                 }}
                             >
                                 {l.title}

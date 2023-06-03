@@ -21,7 +21,7 @@ api_user.interceptors.response.use(
         return config
     },
     (error) => {
-        console.log(error.response.data)
+        console.log(error)
         if (error.response?.data?.tokenError) {
             api_client.get("/auth/refresh")
         }
